@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String phone_number = num.getText().toString();
                     try {
-                        int num_test = Integer.parseInt(phone_number, 10);
+                        long num_test = Long.parseLong(phone_number, 10);
                     } catch (Exception e) {
                         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         return;
