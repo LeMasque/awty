@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean started = false;
     public static final String alert = "edu.washington.swalden1.arewethereyet.message";
+    public static final String numbar = "edu.washington.swalden1.arewethereyet.number";
     public static final String TAG = "[arewethereyet]";
     private PendingIntent alarmIntent;
     private Intent i;
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, e.getMessage());
                         return;
                     }
-
                     String message = msg.getText().toString();
                     if (message.length() < 1) {
                         Toast.makeText(MainActivity.this, "Message must be at least one character", Toast.LENGTH_SHORT).show();
@@ -75,8 +76,12 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Invalid Phone Number: " + phone_number, Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    String formatted_number = phone_number;
+
                     i = new Intent(MainActivity.this, alarm_receiver.class);
-                    i.putExtra(MainActivity.alert, formatted_number + ": " + message);
+                    i.putExtra(MainActivity.numbar, phone_number);
+                    i.putExtra(MainActivity.alert, message);
                     alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
                     am.setRepeating(am.RTC, System.currentTimeMillis(), 1000 * 60 * interval, alarmIntent);
                     start.setText("Stop");
@@ -88,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String formatNumber(String pNumber) {
+    public static String formatNumber(String pNumber) {
         StringBuilder result = new StringBuilder();
         if (pNumber.length() == 10) {
             result.append('(');
@@ -105,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 result.append(pNumber.charAt(result.length() > 0? i+3 : i));
             }
+        } else if (pNumber.length() == 4) { // emulator port
+            return pNumber;
         } else {
             return null;
         }
