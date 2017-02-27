@@ -52,8 +52,19 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, e.getMessage());
                         return;
                     }
+
                     String message = msg.getText().toString();
+                    if (message.length() < 1) {
+                        Toast.makeText(MainActivity.this, "Message must be at least one character", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     String phone_number = num.getText().toString();
+                    try {
+                        int num_test = Integer.parseInt(phone_number, 10);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     if (interval < 0) {
                         Toast.makeText(MainActivity.this, "Interval must be a non-negative Integer value", Toast.LENGTH_SHORT).show();
